@@ -9,4 +9,28 @@ var getUserRepos = function(user) {
   });
 };
 
-getUserRepos("isaiasqb")
+// form functionality
+var userFormEl = document.querySelector("#user-form");
+var nameInpulEl = document.querySelector("#username");
+
+
+//function for Submission browser event
+var formSubmitHandler = function(event) {
+  event.preventDefault();
+
+  //get value form input element
+  var username = nameInpulEl.value.trim();
+
+  if(username) {
+    getUserRepos(username);
+    nameInpulEl.value = "";
+  } else {
+    alert("Please enter a GitHub Username");
+  }
+}
+
+
+// submit event listener
+userFormEl.addEventListener("submit", formSubmitHandler);
+
+// getUserRepos("isaiasqb")

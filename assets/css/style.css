@@ -50,7 +50,7 @@ p {
   display: block;
   margin: 5px 0;
   border-radius: var(--border-radius);
-  color: var(--primary);
+  color: var(--tertiary);
   border: none;
   outline: none;
   background-color: var(--light-dark);
