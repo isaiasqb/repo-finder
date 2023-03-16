@@ -2,8 +2,8 @@
   --primary: #f4f1de;
   --secondary: #e07a5f;
   --tertiary: #788585;
-  --light-dark: #f2cc8f;
-  --dark: #6d597a;
+  --light-dark: #457b9d;
+  --dark: #405c81;
   --border-radius: .3rem;
 }
 
@@ -50,7 +50,7 @@ p {
   display: block;
   margin: 5px 0;
   border-radius: var(--border-radius);
-  color: var(--tertiary);
+  color: var(--primary);
   border: none;
   outline: none;
   background-color: var(--light-dark);
