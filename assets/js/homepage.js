@@ -27,9 +27,17 @@ var getUserRepos = function(user) {
 
   // make a request ot the url
   fetch(apiUrl).then(function(response) {
-    response.json().then(function(data) {
-      displayRepos(data, user)
-    });
+    if (response.ok) {
+      response.json().then(function(data) {
+        displayRepos(data, user)
+      });
+    } else { // error handling for user not found
+      alert("Error: GitHub User Not Found");
+    }
+  })
+  //error handling  network connectivity issues 
+  .catch(function(error) {
+    alert("Unable to connect to GitHub");
   });
 };
 
@@ -39,6 +47,12 @@ var displayRepos = function(repos, searchTerm) {
   // be sure to clear out the old content before displaying new content.
   repoContainerEl.textContent = "";
   repoSearchTerm.textContent = searchTerm;
+
+  // if the username has no repos to show
+  if(repos.length === 0){ // error handling for user with no repos
+    repoContainerEl.textContent = "NO REPOSITORIES FOUND";
+    return
+  }
 
   //loop over the repos(data)
   for(var i = 0; i < repos.length; i++) {
