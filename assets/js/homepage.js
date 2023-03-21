@@ -1,11 +1,12 @@
 // form functionality
 var userFormEl = document.querySelector("#user-form");
 var nameInpulEl = document.querySelector("#username");
+var languageButtonsEl = document.querySelector("#language-buttons");
 // list of repos column functionality
 var repoContainerEl = document.querySelector('#repos-container');
 var repoSearchTerm = document.querySelector('#repo-search-term')
 
-//function for Submission browser event
+//function for Submission of the user form event
 var formSubmitHandler = function(event) {
   event.preventDefault();
 
@@ -21,11 +22,25 @@ var formSubmitHandler = function(event) {
   }
 }
 
-// fetch request
+//function for clicking any of the language buttons
+var languageButtonClick = function(event) {
+  //event delegation, capture the language name of the button clicked
+  var language = event.target.getAttribute("data-laguage");
+  if(language) {
+    getFeaturedRepos(language);
+    //clear ol content
+    //this line will always execute first, because getFeaturedRepos() is asynchronous 
+    //and will take longer to get a response from GitHub's API.
+    repoContainerEl.textContent = ""
+  }
+}
+
+
+// fetch request for repos by user
 var getUserRepos = function(user) {
   var apiUrl = `https://api.github.com/users/${user}/repos`;
 
-  // make a request ot the url
+  // make a request ot the url`
   fetch(apiUrl).then(function(response) {
     if (response.ok) {
       response.json().then(function(data) {
@@ -38,6 +53,22 @@ var getUserRepos = function(user) {
   //error handling  network connectivity issues 
   .catch(function(error) {
     alert("Unable to connect to GitHub");
+  });
+};
+
+
+//looking up repos by their language
+var getFeaturedRepos = function(language) {
+  var apiUrl = "https://api.github.com/search/repositories?q=" + language + "+is:featured&sort=help-wanted-issues";
+  fetch(apiUrl).then(function(response) {
+    if(response.ok) {
+      response.json().then(function(data) {
+        //pass data.items and the language parameter's value into displayRepos()
+        displayRepos(data.items, language)
+      });
+    } else {
+      alert ("ERROR: User not found");
+    }
   });
 };
 
@@ -88,6 +119,9 @@ var displayRepos = function(repos, searchTerm) {
   }
 }
 
-// submit event listener
+// "submit" event listener for "search by user form" 
 userFormEl.addEventListener("submit", formSubmitHandler);
+
+//event listener for language buttons (event delegation instead of creating a listener for each button)
+languageButtonsEl.addEventListener("click", languageButtonClick);
 
